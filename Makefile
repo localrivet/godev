@@ -1,6 +1,6 @@
 # global variables - change these to your own Docker Hub configuration if 
 # you are forking this repository and building your own image out of this
-DOCKER_NAMESPACE=zephinzer
+DOCKER_NAMESPACE=localrivet
 DOCKER_IMAGE_NAME=golang-dev
 
 # builds the image for use locally

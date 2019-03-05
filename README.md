@@ -49,10 +49,10 @@ shell:
 	$(MAKE) _dev ARG="shell"
 # retrieves the latest version we are at
 version.get:
-	@docker run -v "$(CURDIR):/app" zephinzer/vtscripts:latest get-latest -q
+	@docker run -v "$(CURDIR):/app" localrivet/vtscripts:latest get-latest -q
 # bumps the version by 1: specify VERSION as "patch", "minor", or "major", to be specific about things
 version.bump:
-	@docker run -v "$(CURDIR):/app" zephinzer/vtscripts:latest iterate ${VERSION} -i
+	@docker run -v "$(CURDIR):/app" localrivet/vtscripts:latest iterate ${VERSION} -i
 # base command to run other scripts (do not use alone)
 _dev:
 	@docker run \
@@ -61,7 +61,7 @@ _dev:
     -u $$(id -u) \
     -v "$(CURDIR)/.cache/pkg:/go/pkg" \
     -v "$(CURDIR):/go/src/app" \
-    zephinzer/golang-dev:$(GOLANG_DEV_VERSION) ${ARG}
+    localrivet/golang-dev:$(GOLANG_DEV_VERSION) ${ARG}
 ```
 
 Check out [the documentation below on how to bundle your application into a `scratch` Docker image](#building-into-a-docker-image).
@@ -76,7 +76,7 @@ docker run -it \
   -u ${UID} \
   -v "$(pwd)/.cache/pkg:/go/pkg" \
   -v "$(pwd):/go/src/app" \
-  zephinzer/golang-dev:latest init;
+  localrivet/golang-dev:latest init;
 ```
 
 The script should ask a series of questions which if you agree to all, will create a Git repository, add an appropriate .gitignore file, initialise `go mod`, and provision a Dockerfile you can use to build your own image.
@@ -96,7 +96,7 @@ docker run -it \
   --network host \
   -v "$(pwd)/.cache/pkg:/go/pkg" \
   -v "$(pwd):/go/src/app" \
-  zephinzer/golang-dev:latest start;
+  localrivet/golang-dev:latest start;
 ```
 
 To start the tests, create a new terminal in the same directory and run:
@@ -107,7 +107,7 @@ docker run -it \
   --network host \
   -v "$(pwd)/.cache/pkg:/go/pkg" \
   -v "$(pwd):/go/src/app" \
-  zephinzer/golang-dev:latest test;
+  localrivet/golang-dev:latest test;
 ```
 
 **Notes**
@@ -127,7 +127,7 @@ docker run -it \
   -u ${UID} \
   -v "$(pwd)/.cache/pkg:/go/pkg" \
   -v "$(pwd):/go/src/app" \
-  zephinzer/golang-dev:latest build;
+  localrivet/golang-dev:latest build;
 ```
 
 The binary will appear in your current directory and be named `app.$GOOS.$GOARCH`. It will be postfixd with a `.exe` if `$GOOS` specifies a Windows build.
@@ -141,7 +141,7 @@ The binary will appear in your current directory and be named `app.$GOOS.$GOARCH
 If you denied the `init` script from creating a Dockerfile, you can run it again to get it. Otherwise, the Dockerfile script should be:
 
 ```Dockerfile
-FROM zephinzer/golang-dev:latest as development
+FROM localrivet/golang-dev:latest as development
 COPY . /go/src/app
 ENTRYPOINT [ "start" ]
 FROM development as build
@@ -172,7 +172,7 @@ version: "3.5" # or anything you're using
 services:
   # ...
   app:
-    image: zephinzer/golang-dev:latest
+    image: localrivet/golang-dev:latest
     environment: # if needed
       PORT: "3000"
     ports: # if needed
@@ -248,8 +248,8 @@ This publishes two images - one with the version as recorded by the Git tags, an
 This project is licensed under the MIT license. See [the LICENSE file](./LICENSE) for the full text.
 
 ## All Relevant Links
-- [GitHub Repository](https://github.com/zephinzer/golang-dev)
-- [DockerHub Repository](https://hub.docker.com/r/zephinzer/golang-dev)
+- [GitHub Repository](https://github.com/localrivet/golang-dev)
+- [DockerHub Repository](https://hub.docker.com/r/localrivet/golang-dev)
 
 ## Support/Work Hours
 This is a side-project of mine meant to support my own development needs. I have a day job, so unless I have an urgent need while using this in my professional work, most of my code-level work on this repository will be done during weekends. Pull requests are supported throughout the week!(:
